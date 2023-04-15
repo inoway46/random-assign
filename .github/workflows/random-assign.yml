@@ -1,0 +1,29 @@
+name: Random Assign
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      number:
+        required: true
+        type: integer
+    secrets:
+      token:
+        required: true
+
+jobs:
+  random-assign-codeowners:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          head -n 1 ${{ inputs.path }} |
+            tr -d '@' |
+            sed s/^\*\ // |
+            sed s/\ /\\n/g |
+            shuf -n 1 |
+            xargs gh pr edit ${{ inputs.number }} --add-assignee
+        with:
+          GITHUB_TOKEN: ${{ secrets.token }}
