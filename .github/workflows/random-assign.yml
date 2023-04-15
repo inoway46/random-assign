@@ -1,5 +1,10 @@
 name: Random Assign
 
+env:
+  NUMBER: ${{ inputs.number }}
+  REPO: ${{ inputs.repo }}
+  GITHUB_TOKEN: ${{ secrets.token }}
+
 on:
   workflow_call:
     inputs:
@@ -31,7 +36,3 @@ jobs:
           sed s/\ /\\n/g |
           shuf -n 1 |
           xargs gh pr edit $NUMBER --add-assignee
-      env:
-        NUMBER: ${{ inputs.number }}
-        REPO: ${{ inputs.repo }}
-        GITHUB_TOKEN: ${{ secrets.token }}
