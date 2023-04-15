@@ -27,7 +27,7 @@ jobs:
           env:
             NUMBER: ${{ inputs.number }}
             REPO: ${{ inputs.path }}
-            GITHUB_TOKEN: ${{ secrets.token }}
+            # GITHUB_TOKEN: ${{ secrets.token }}
           run: |
             tail ./$REPO/.github/CODEOWNERS -n 1 |
               tr -d '@' |
