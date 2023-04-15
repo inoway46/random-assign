@@ -19,7 +19,7 @@ on:
 jobs:
   random-assign-codeowners:
     runs-on: ubuntu-latest
-    # if: ${{ inputs.user }} == 'dependabot' || ${{ inputs.user }} == 'dependabot[bot]'
+    if: ${{ inputs.user }} == 'dependabot' || ${{ inputs.user }} == 'dependabot[bot]'
 
     steps:
         - name: checkout
