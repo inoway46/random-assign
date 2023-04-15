@@ -3,27 +3,41 @@ name: Random Assign
 on:
   workflow_call:
     inputs:
-      path:
+      user:
+        required: true
+        type: string
+      repo:
         required: true
         type: string
       number:
         required: true
-        type: integer
+        type: string
     secrets:
       token:
         required: true
 
 jobs:
   random-assign-codeowners:
+  if: inputs.user == 'dependabot' || inputs.user == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ inputs.repo }}
+          ref: master
+          path: ${{ inputs.repo }}
+          token: ${{ secrets.token }}
+      - name: random assign
+        env:
+          NUMBER: ${{ inputs.number }}
+          REPO: ${{ inputs.path }}
       - run: |
-          head -n 1 ${{ inputs.path }} |
+          tail ./$REPO/.github/CODEOWNERS -n 1 |
             tr -d '@' |
             sed s/^\*\ // |
             sed s/\ /\\n/g |
             shuf -n 1 |
-            xargs gh pr edit ${{ inputs.number }} --add-assignee
+            xargs gh pr edit $NUMBER --add-assignee
         with:
-          GITHUB_TOKEN: ${{ secrets.token }}
+          token: ${{ secrets.token }}
