@@ -3,9 +3,6 @@ name: Random Assign
 on:
   workflow_call:
     inputs:
-      user:
-        required: true
-        type: string
       number:
         required: true
         type: string
