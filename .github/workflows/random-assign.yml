@@ -1,17 +1,9 @@
 name: Random Assign
 
-env:
-  NUMBER: ${{ inputs.number }}
-  REPO: ${{ inputs.repo }}
-  GITHUB_TOKEN: ${{ secrets.token }}
-
 on:
   workflow_call:
     inputs:
       user:
-        required: true
-        type: string
-      repo:
         required: true
         type: string
       number:
@@ -30,9 +22,12 @@ jobs:
       uses: actions/checkout@v3
     - name: random assign
       run: |
-        tail $REPO/.github/CODEOWNERS -n 1 |
+        tail .github/CODEOWNERS -n 1 |
           tr -d '@' |
           sed s/^\*\ // |
           sed s/\ /\\n/g |
           shuf -n 1 |
           xargs gh pr edit $NUMBER --add-assignee
+      env:
+        NUMBER: ${{ inputs.number }}
+        GITHUB_TOKEN: ${{ secrets.token }}
