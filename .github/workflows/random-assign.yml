@@ -18,7 +18,6 @@ on:
 
 jobs:
   random-assign-codeowners:
-  if: inputs.user == 'dependabot' || inputs.user == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: checkout
