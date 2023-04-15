@@ -1,10 +1,5 @@
 name: Random Assign
 
-env:
-  NUMBER: ${{ inputs.number }}
-  REPO: ${{ inputs.path }}
-  GITHUB_TOKEN: ${{ secrets.token }}
-
 on:
   workflow_call:
     inputs:
@@ -26,13 +21,18 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
-        - name: checkout
-          uses: actions/checkout@v3
-        - name: random assign
-          run: |
-            tail ./$REPO/.github/CODEOWNERS -n 1 |
-              tr -d '@' |
-              sed s/^\*\ // |
-              sed s/\ /\\n/g |
-              shuf -n 1 |
-              xargs gh pr edit $NUMBER --add-assignee
+    - name: checkout
+      uses: actions/checkout@v3
+    - name: random assign
+      run: |
+        echo ${{github.ref}}
+        tail ./$REPO/.github/CODEOWNERS -n 1 |
+          tr -d '@' |
+          sed s/^\*\ // |
+          sed s/\ /\\n/g |
+          shuf -n 1 |
+          xargs gh pr edit $NUMBER --add-assignee
+      env:
+        NUMBER: ${{ inputs.number }}
+        REPO: ${{ inputs.repo }}
+        GITHUB_TOKEN: ${{ secrets.token }}
