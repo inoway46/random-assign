@@ -18,9 +18,8 @@ on:
 
 jobs:
   random-assign-codeowners:
+    if: ${{ github.actor == 'dependabot[bot]' }}
     runs-on: ubuntu-latest
-    if: ${{ inputs.user }} == 'dependabot' || ${{ inputs.user }} == 'dependabot[bot]'
-
     steps:
         - name: checkout
           uses: actions/checkout@v3
