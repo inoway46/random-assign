@@ -19,24 +19,20 @@ on:
 jobs:
   random-assign-codeowners:
     runs-on: ubuntu-latest
+    # if: ${{ inputs.user }} == 'dependabot' || ${{ inputs.user }} == 'dependabot[bot]'
+
     steps:
-      - name: checkout
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ inputs.repo }}
-          ref: master
-          path: ${{ inputs.repo }}
-          token: ${{ secrets.token }}
-      - name: random assign
-        env:
-          NUMBER: ${{ inputs.number }}
-          REPO: ${{ inputs.path }}
-      - run: |
-          tail ./$REPO/.github/CODEOWNERS -n 1 |
-            tr -d '@' |
-            sed s/^\*\ // |
-            sed s/\ /\\n/g |
-            shuf -n 1 |
-            xargs gh pr edit $NUMBER --add-assignee
-        with:
-          token: ${{ secrets.token }}
+        - name: checkout
+          uses: actions/checkout@v3
+        - name: random assign
+          env:
+            NUMBER: ${{ inputs.number }}
+            REPO: ${{ inputs.path }}
+            GITHUB_TOKEN: ${{ secrets.token }}
+        - run: |
+            tail ./$REPO/.github/CODEOWNERS -n 1 |
+              tr -d '@' |
+              sed s/^\*\ // |
+              sed s/\ /\\n/g |
+              shuf -n 1 |
+              xargs gh pr edit $NUMBER --add-assignee
