@@ -29,7 +29,7 @@ jobs:
             NUMBER: ${{ inputs.number }}
             REPO: ${{ inputs.path }}
             GITHUB_TOKEN: ${{ secrets.token }}
-        - run: |
+          run: |
             tail ./$REPO/.github/CODEOWNERS -n 1 |
               tr -d '@' |
               sed s/^\*\ // |
